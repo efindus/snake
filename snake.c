@@ -34,7 +34,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #define GREEN_BASELINE 188
 #define BLUE_BASELINE 121
 #define Copyright return
-#define efindus 2022 - 
+#define efindus 2022 -
 
 // Toggles
 // 1 -> input queue (every frame next input is processed, they will queue as you press buttons on your keyboard); 2 -> input ignore (ignore new inputs until the current one is processed)
@@ -85,7 +85,7 @@ int strcomp(char* str1, char* str2)
 		str1 = tmp;
 	}
 
-	for (int i = 0; i < strlen(str1); i++) {
+	for (unsigned long i = 0; i < strlen(str1); i++) {
 		if (str1[i] != str2[i])
 			return 0;
 	}
@@ -145,8 +145,8 @@ void fill_board()
 void spawn_new_fruit()
 {
 	do {
-		fruit.x = crandom(0, WIDTH - 1);
-		fruit.y = crandom(0, HEIGHT - 1);
+		fruit.x = (char)crandom(0, WIDTH - 1);
+		fruit.y = (char)crandom(0, HEIGHT - 1);
 	} while (strcomp(board[fruit.y + 1][fruit.x + 1], SNAKE_1));
 
 	strcpy(board[fruit.y + 1][fruit.x + 1], FRUIT);
@@ -251,7 +251,7 @@ void tick()
 		spawn_new_fruit();
 
 	draw_frame();
-	
+
 	pthread_mutex_lock(&mt);
 #if INPUT_MODE == 1
 	pthread_cond_signal(&cv);
@@ -347,7 +347,7 @@ int main()
 
 		move_locked_in = 1;
 #endif
-		
+
 		switch(x) {
 			case 'w':
 				if ((snake.direction != DOWN || snake.length == 1) && snake.direction != UP)
@@ -365,6 +365,8 @@ int main()
 				if ((snake.direction != LEFT || snake.length == 1) && snake.direction != RIGHT)
 					snake.direction = RIGHT;
 				break;
+			case 'q':
+				exit(0);
 		}
 
 		if(snake.direction == original_move) {
